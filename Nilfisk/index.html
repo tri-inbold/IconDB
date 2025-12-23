@@ -27,6 +27,7 @@
     background: #4285F4; color: white; border: none; padding: 12px 24px;
     border-radius: 4px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;
   }
+  .btn-google:disabled { background: #a0c3ff; cursor: not-allowed; }
   #mainApp { display: none; height: 100vh; flex-direction: column; }
   .header {
     background: white; border-bottom: 1px solid #e0e0e0;
@@ -39,13 +40,12 @@
   .sidebar { width: 240px; background: white; border-right: 1px solid #e0e0e0; overflow-y: auto; flex-shrink: 0; }
   .sidebar-section { padding: 16px; border-bottom: 1px solid #e0e0e0; }
   .sidebar-section h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; margin-bottom: 12px; }
-  .collection-item {
+  .collection-item, .swatch-item {
     padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 14px;
     display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
   }
-  .collection-item:hover { background: #f5f5f5; }
+  .collection-item:hover, .swatch-item:hover { background: #f5f5f5; }
   .collection-item.active { background: #e3f2fd; color: #1976d2; font-weight: 600; }
-  .swatch-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
   .swatch-color { width: 18px; height: 18px; border-radius: 3px; border: 1px solid #ddd; }
   .icon-grid-container { flex: 1; overflow-y: auto; padding: 24px; background: #fafafa; }
   .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
@@ -203,8 +203,8 @@
       card.className = 'icon-card' + (state.selected?.name === icon.name ? ' selected' : '');
       const blob = new Blob([icon.svg], {type: 'image/svg+xml'});
       const url = URL.createObjectURL(blob);
-      card.innerHTML = `<div class="icon-preview"><img src="${url}"></div><div class="icon-name">${icon.name}</div>`;
-      card.onclick = () => { state.selected = icon; render(); showDetail(); };
+      card.innerHTML = `<div class="icon-preview"><img src="${url}" onload="URL.revokeObjectURL(this.src)"></div><div class="icon-name">${icon.name}</div>`;
+      card.onclick = () => { state.selected = icon; render(); showDetail(); document.getElementById('detailPanel').classList.add('show'); };
       card.oncontextmenu = (e) => { e.preventDefault(); showIconCtx(e.clientX, e.clientY, icon); };
       grid.appendChild(card);
     });
@@ -239,29 +239,21 @@
     preview.innerHTML = icon.svg;
     document.getElementById('editName').value = icon.name;
     
-    // SVG Analysis
     const svgEl = preview.querySelector('svg');
     const colors = { f: new Set(), s: new Set() };
     const strokes = new Set();
-
-    // Force style compute for classes
-    const elements = svgEl.querySelectorAll('*');
-    elements.forEach(el => {
+    
+    svgEl.querySelectorAll('*').forEach(el => {
       const style = window.getComputedStyle(el);
-      const fill = style.fill;
-      const stroke = style.stroke;
-      const sw = style.strokeWidth;
-      
-      if (fill && fill !== 'none' && fill.startsWith('rgb')) colors.f.add(rgbToHex(fill));
-      if (stroke && stroke !== 'none' && stroke.startsWith('rgb')) colors.s.add(rgbToHex(stroke));
-      if (parseFloat(sw) > 0) strokes.add(sw);
+      if (style.fill !== 'none' && style.fill.startsWith('rgb')) colors.f.add(rgbToHex(style.fill));
+      if (style.stroke !== 'none' && style.stroke.startsWith('rgb')) colors.s.add(rgbToHex(style.stroke));
+      if (parseFloat(style.strokeWidth) > 0) strokes.add(style.strokeWidth);
     });
 
     const cList = document.getElementById('colorList');
     cList.innerHTML = '';
     [...colors.f].forEach(c => addColorRow(c, 'Fill', cList));
     [...colors.s].forEach(c => addColorRow(c, 'Stroke', cList));
-
     const sList = document.getElementById('strokeList');
     sList.innerHTML = [...strokes].map(s => `<div style="font-size:12px; margin-bottom:4px">Width: <b>${s}</b></div>`).join('');
   }
@@ -286,7 +278,7 @@
     showDetail();
     render();
   }
-
+  
   function rgbToHex(rgb) {
     const match = rgb.match(/\d+/g);
     return "#" + match.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('').toUpperCase();
@@ -295,15 +287,17 @@
   function showIconCtx(x, y, icon) {
     const menu = document.getElementById('ctxMenu');
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
-    menu.innerHTML = `<div class="context-menu-item" onclick="navigator.clipboard.writeText(state.selected.svg)">Copy SVG</div><div class="context-menu-item" style="color:red" id="ctxDel">Delete Icon</div>`;
-    document.getElementById('ctxDel').onclick = async () => {
-      if(confirm(`Delete ${icon.name}?`)) {
-        await updateDoc(doc(db, "Nilfisk", icon.collection), { [icon.name]: deleteField() });
-        state.icons = state.icons.filter(i => i.name !== icon.name);
-        state.selected = null; render();
-        document.getElementById('detailPanel').classList.remove('show');
-      }
-    };
+    menu.innerHTML = `<div class="context-menu-item" style="color:red">Delete Icon</div>`;
+    menu.querySelector('div').onclick = () => deleteIcon(icon);
+  }
+
+  async function deleteIcon(icon) {
+    if(confirm(`Delete "${icon.name}" from "${icon.collection}"?`)) {
+      await updateDoc(doc(db, "Nilfisk", icon.collection), { [icon.name]: deleteField() });
+      state.selected = null;
+      document.getElementById('detailPanel').classList.remove('show');
+      loadData();
+    }
   }
 
   function showColCtx(x, y, col) {
@@ -311,26 +305,30 @@
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
     menu.innerHTML = `<div class="context-menu-item" style="color:red">Delete Collection</div>`;
     menu.querySelector('div').onclick = async () => {
-      if(confirm(`Delete collection ${col}?`)) {
+      if(confirm(`Delete collection "${col}"? This cannot be undone.`)) {
         state.collections = state.collections.filter(c => c !== col);
         await setDoc(doc(db, "Nilfisk", "Collections"), { list: state.collections });
-        render();
+        loadData();
       }
     };
   }
-
+  
   function showSwatchCtx(x, y, s) {
     const menu = document.getElementById('ctxMenu');
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
     menu.innerHTML = `<div class="context-menu-item" style="color:red">Delete Swatch</div>`;
     menu.querySelector('div').onclick = async () => {
       await updateDoc(doc(db, "Nilfisk", "Swatches"), { [s.name]: deleteField() });
-      state.swatches = state.swatches.filter(sw => sw.name !== s.name);
-      render();
+      loadData();
     };
   }
 
-  document.getElementById('addIconBtn').onclick = () => document.getElementById('uploadModal').classList.add('show');
+  document.getElementById('addIconBtn').onclick = () => {
+    document.getElementById('upName').value = '';
+    document.getElementById('svgPaste').value = '';
+    document.getElementById('uploadModal').classList.add('show');
+  };
+
   document.getElementById('dropZone').onclick = () => document.getElementById('fileInput').click();
   document.getElementById('fileInput').onchange = (e) => {
     const file = e.target.files[0];
@@ -343,13 +341,28 @@
   };
 
   document.getElementById('doUpload').onclick = async () => {
-    const name = document.getElementById('upName').value;
+    const name = document.getElementById('upName').value.trim();
     const col = document.getElementById('upCol').value;
-    const raw = document.getElementById('svgPaste').value;
-    if (name && raw && col) {
-      await updateDoc(doc(db, "Nilfisk", col), { [name]: raw });
+    const raw = document.getElementById('svgPaste').value.trim();
+    const btn = document.getElementById('doUpload');
+
+    if (!name || !col || !raw) {
+      alert("Please provide an icon name, collection, and SVG code.");
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.textContent = 'Uploading...';
+    try {
+      await setDoc(doc(db, "Nilfisk", col), { [name]: raw }, { merge: true });
       document.getElementById('uploadModal').classList.remove('show');
       loadData();
+    } catch(e) {
+      console.error("Upload failed:", e);
+      alert("Upload failed. Check console for errors.");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Upload to Cloud';
     }
   };
 
@@ -366,15 +379,16 @@
     const n = prompt('Swatch name:');
     const c = prompt('Hex color:', '#000000');
     if (n && c) {
-      await updateDoc(doc(db, "Nilfisk", "Swatches"), { [n]: c });
-      state.swatches.push({ name: n, color: c });
-      render();
+      await setDoc(doc(db, "Nilfisk", "Swatches"), { [n]: c }, { merge: true });
+      loadData();
     }
   };
 
   document.getElementById('searchInput').oninput = (e) => { state.query = e.target.value; render(); };
   document.getElementById('copySvgBtn').onclick = () => { navigator.clipboard.writeText(state.selected.svg); alert('SVG Copied!'); };
-  document.addEventListener('click', (e) => { if(!e.target.closest('.context-menu')) document.getElementById('ctxMenu').style.display='none'; });
+  document.getElementById('delIconBtn').onclick = () => deleteIcon(state.selected);
+  document.addEventListener('click', (e) => { if(!e.target.closest('.context-menu, [oncontextmenu]')) document.getElementById('ctxMenu').style.display='none'; });
+
 </script>
 </body>
 </html>
