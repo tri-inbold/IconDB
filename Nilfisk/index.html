@@ -84,7 +84,7 @@
     <div class="icon-grid-container" id="gridContainer"><div class="icon-grid" id="iconGrid"></div></div>
     <div class="detail-panel" id="detailPanel">
       <div class="detail-section">
-        <h3>Preview <img id="bgToggle" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXNxdWFyZS1kYXNoZWQtYm90dG9tIj48cGF0aCBkPSJNOCAxMnY2Ii8+PHBhdGggZD0iTTEyIDEydjYiLz48cGF0aCBkPSJNMTYgMTJ2NiIvPjxwYXRoIGQ9Ik00IDIwVjdoYTMgMyAwIDAgMSAzIDNoMGEzIDMgMCAwIDAgMyAzaDZhMyAzIDAgMCAxIDMgM3Y0Ii8+PC9zdmc+" style="cursor:pointer; opacity:0.6"></h3>
+        <h3>Preview <img id="bgToggle" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgeD0iMyIgeT0iMyIgcng9IjIiLz48cGF0aCBkPSJNMTMgMyAxMyAyMSIvPjwvc3ZnPg==" style="cursor:pointer; opacity:0.6"></h3>
         <div class="canvas-preview checker" id="previewBox"></div>
         <div class="export-grid">
           <button id="copySvgBtn">Copy SVG</button>
@@ -121,7 +121,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField, writeBatch } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAsv8v9b7YXgt7315B6184e9E85QCL9Qfs",
@@ -135,12 +135,11 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
 
   let state = { icons: [], swatches: [], collections: [], selected: null, activeCol: 'All Icons', query: '' };
   let bgModes = ['checker', 'white', 'dark'], currentBg = 0;
 
-  document.getElementById('loginBtn').onclick = () => signInWithPopup(auth, provider);
+  document.getElementById('loginBtn').onclick = () => signInWithPopup(auth, new GoogleAuthProvider());
   document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
   onAuthStateChanged(auth, async (user) => {
@@ -187,6 +186,7 @@
       const url = URL.createObjectURL(blob);
       card.innerHTML = `<div class="icon-preview"><img src="${url}" onload="URL.revokeObjectURL(this.src)"></div><div class="icon-name">${icon.name}</div>`;
       card.onclick = () => { state.selected = icon; render(); showDetail(); };
+      card.oncontextmenu = (e) => { e.preventDefault(); state.selected = icon; showIconCtx(e.clientX, e.clientY); };
       grid.appendChild(card);
     });
 
@@ -389,7 +389,7 @@
     if (!name || !col || !raw) return alert("All fields are required.");
     const btn = document.getElementById('doUpload'); btn.disabled = true; btn.textContent = 'Uploading...';
     try {
-      await updateDoc(doc(db, "Nilfisk", "Icons"), { [name]: { svg: raw, collections: [col], tags: [] } });
+      await setDoc(doc(db, "Nilfisk", "Icons"), { [name]: { svg: raw, collections: [col], tags: [] } }, { merge: true });
       closeModal(); loadData();
     } catch(e) { alert("Upload failed: " + e.message); } 
     finally { btn.disabled = false; btn.textContent = 'Upload to Cloud'; }
