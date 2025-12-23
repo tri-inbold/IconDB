@@ -27,47 +27,44 @@
     background: #4285F4; color: white; border: none; padding: 12px 24px;
     border-radius: 4px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;
   }
-  .btn-google:disabled { background: #a0c3ff; cursor: not-allowed; }
   #mainApp { display: none; height: 100vh; flex-direction: column; }
   .header {
     background: white; border-bottom: 1px solid #e0e0e0;
     padding: 16px 24px; display: flex; align-items: center; gap: 16px; flex-shrink: 0;
   }
-  .header h1 { font-size: 20px; font-weight: 600; }
   .search-box { flex: 1; max-width: 500px; }
   .search-box input { width: 100%; padding: 8px 12px; border: 1px solid #d0d0d0; border-radius: 4px; font-size: 14px; }
   .main-content { display: flex; flex: 1; overflow: hidden; }
   .sidebar { width: 240px; background: white; border-right: 1px solid #e0e0e0; overflow-y: auto; flex-shrink: 0; }
   .sidebar-section { padding: 16px; border-bottom: 1px solid #e0e0e0; }
   .sidebar-section h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; margin-bottom: 12px; }
-  .collection-item, .swatch-item {
-    padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 14px;
-    display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
-  }
-  .collection-item:hover, .swatch-item:hover { background: #f5f5f5; }
+  .collection-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .collection-item:hover { background: #f5f5f5; }
   .collection-item.active { background: #e3f2fd; color: #1976d2; font-weight: 600; }
+  .collection-item.drag-over { background: var(--nilfisk-pro-blue); color: white; }
+  .swatch-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
   .swatch-color { width: 18px; height: 18px; border-radius: 3px; border: 1px solid #ddd; }
   .icon-grid-container { flex: 1; overflow-y: auto; padding: 24px; background: #fafafa; }
   .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
   .icon-card { background: white; border: 1px solid #eee; border-radius: 8px; padding: 12px; cursor: pointer; text-align: center; transition: 0.2s; }
   .icon-card:hover { border-color: var(--nilfisk-pro-blue); transform: translateY(-2px); }
   .icon-card.selected { border: 2px solid var(--nilfisk-pro-blue); background: #f0f9fd; }
-  .icon-preview {
-    width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-    margin-bottom: 8px; background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
-    background-size: 10px 10px; border-radius: 4px; overflow: hidden;
-  }
+  .icon-preview { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%); background-size: 10px 10px; border-radius: 4px; overflow: hidden; }
   .icon-preview svg, .icon-preview img { max-width: 80%; max-height: 80%; display: block; }
   .icon-name { font-size: 11px; font-weight: 500; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .detail-panel { width: 340px; background: white; border-left: 1px solid #e0e0e0; overflow-y: auto; display: none; }
   .detail-panel.show { display: block; }
   .detail-section { padding: 20px; border-bottom: 1px solid #f0f0f0; }
-  .detail-section h3 { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: #666; }
-  .canvas-preview { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-bottom: 12px; }
+  .detail-section h3 { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: #666; display: flex; align-items: center; justify-content: space-between; }
+  .canvas-preview { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin-bottom: 12px; transition: background 0.3s; }
   .canvas-preview.checker { background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%); background-size: 20px 20px; }
+  .canvas-preview.white { background: #fff; border: 1px solid #eee; }
+  .canvas-preview.dark { background: var(--nilfisk-dark); }
   .canvas-preview svg { max-width: 85%; max-height: 85%; }
   .color-item { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #eee; border-radius: 6px; margin-bottom: 8px; }
   .color-preview { width: 28px; height: 28px; border-radius: 4px; border: 1px solid #ddd; }
+  .tag-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: #e3f2fd; color: #1976d2; border-radius: 12px; font-size: 11px; margin: 2px; }
+  .tag-chip button { background: none; border: none; cursor: pointer; color: inherit; font-size: 14px; }
   .fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--nilfisk-pro-blue); color: white; border: none; border-radius: 50%; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(56, 175, 217, 0.4); }
   .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 2000; align-items: center; justify-content: center; }
   .modal.show { display: flex; }
@@ -83,7 +80,7 @@
   <div class="login-card">
     <img src="https://www.nilfisk.com/PublishingImages/nilfisk-logo.svg" width="120" style="margin-bottom: 20px;">
     <h2>Icon Database</h2>
-    <p id="authMsg" style="margin-top: 10px; color: #666; font-size: 14px;">Sign in with Google to continue</p>
+    <p id="authMsg" style="margin-top: 10px; color: #666; font-size: 14px;">Sign in to continue</p>
     <button class="btn-google" id="loginBtn">Sign in with Google</button>
   </div>
 </div>
@@ -91,7 +88,7 @@
 <div id="mainApp">
   <div class="header">
     <h1>Nilfisk Hub</h1>
-    <div class="search-box"><input type="text" id="searchInput" placeholder="Search icons..."></div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, tag:&quot;...&quot;, collection:&quot;...&quot;"></div>
     <button id="logoutBtn" style="padding: 6px 12px; cursor: pointer; background: white; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;">Logout</button>
   </div>
   <div class="main-content">
@@ -99,17 +96,20 @@
       <div class="sidebar-section"><h3>Collections</h3><div id="colList"></div><button style="border:none; background:none; color:var(--nilfisk-pro-blue); font-size:12px; cursor:pointer; margin-top:10px" id="addColBtn">+ Add New</button></div>
       <div class="sidebar-section"><h3>Swatches</h3><div id="swatchList"></div><button style="border:none; background:none; color:var(--nilfisk-pro-blue); font-size:12px; cursor:pointer; margin-top:10px" id="addSwatchBtn">+ Add Swatch</button></div>
     </div>
-    <div class="icon-grid-container"><div class="icon-grid" id="iconGrid"></div></div>
+    <div class="icon-grid-container" id="gridContainer"><div class="icon-grid" id="iconGrid"></div></div>
     <div class="detail-panel" id="detailPanel">
       <div class="detail-section">
-        <h3>Preview</h3>
+        <h3>Preview <img id="bgToggle" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXNxdWFyZS1kYXNoZWQtYm90dG9tIj48cGF0aCBkPSJNOCAxMnY2Ii8+PHBhdGggZD0iTTEyIDEydjYiLz48cGF0aCBkPSJNMTYgMTJ2NiIvPjxwYXRoIGQ9Ik00IDIwVjdoYTMgMyAwIDAgMSAzIDNoMGEzIDMgMCAwIDAgMyAzaDZhMyAzIDAgMCAxIDMgM3Y0Ii8+PC9zdmc+" style="cursor:pointer; opacity:0.6"></h3>
         <div class="canvas-preview checker" id="previewBox"></div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px">
-          <button id="copySvgBtn" style="padding:8px; cursor:pointer; border:1px solid #ddd; background:white; border-radius:4px; font-size:12px">Copy SVG</button>
-          <button id="delIconBtn" style="padding:8px; cursor:pointer; border:1px solid #ffcdd2; background:#fff5f5; color:#d32f2f; border-radius:4px; font-size:12px">Delete</button>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px">
+          <button id="copySvgBtn">Copy SVG</button>
+          <button id="dlPngBtn">PNG</button>
+          <button id="dlJpgBtn">JPG</button>
         </div>
       </div>
-      <div class="detail-section"><h3>Name</h3><input type="text" id="editName" readonly style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; font-size:13px; background:#f9f9f9"></div>
+      <div class="detail-section"><h3>Name</h3><input type="text" id="editName" readonly style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; background:#f9f9f9"></div>
+      <div class="detail-section"><h3>Collections</h3><div id="iconCollections"></div></div>
+      <div class="detail-section"><h3>Tags</h3><div id="tagContainer"></div><input type="text" id="tagInput" placeholder="Press Enter to add..." style="width:100%; margin-top:8px; padding:8px; border:1px solid #ddd; border-radius:4px;"></div>
       <div class="detail-section"><h3>Colors</h3><div id="colorList"></div></div>
       <div class="detail-section"><h3>Stroke</h3><div id="strokeList"></div></div>
     </div>
@@ -124,9 +124,9 @@
     <select id="upCol" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px;"></select>
     <div id="dropZone" style="border:2px dashed #ddd; border-radius:8px; padding:30px; text-align:center; cursor:pointer; color:#999; margin-bottom:15px">Click or Drop SVG</div>
     <input type="file" id="fileInput" accept=".svg" style="display:none">
-    <textarea id="svgPaste" placeholder="Or paste SVG code here..." style="width:100%; height:120px; padding:10px; border:1px solid #ddd; border-radius:4px; font-family:monospace; font-size:12px; margin-bottom:15px"></textarea>
+    <textarea id="svgPaste" placeholder="Or paste SVG code..." style="width:100%; height:120px; padding:10px; border:1px solid #ddd; border-radius:4px; font-family:monospace; font-size:12px; margin-bottom:15px"></textarea>
     <button class="btn-google" id="doUpload">Upload to Cloud</button>
-    <button style="width:100%; border:none; background:none; color:#999; margin-top:10px; cursor:pointer" onclick="document.getElementById('uploadModal').classList.remove('show')">Cancel</button>
+    <button style="width:100%; border:none; background:none; color:#999; margin-top:10px; cursor:pointer" onclick="closeModal()">Cancel</button>
   </div>
 </div>
 
@@ -135,7 +135,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, getDocs, setDoc, updateDoc, deleteField, collection } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, getDocs, setDoc, updateDoc, deleteField, collection, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAsv8v9b7YXgt7315B6184e9E85QCL9Qfs",
@@ -152,6 +152,8 @@
   const provider = new GoogleAuthProvider();
 
   let state = { icons: [], swatches: [], collections: [], selected: null, activeCol: 'All Icons', query: '' };
+  let bgModes = ['checker', 'white', 'dark'];
+  let currentBg = 0;
 
   document.getElementById('loginBtn').onclick = () => signInWithPopup(auth, provider);
   document.getElementById('logoutBtn').onclick = () => signOut(auth);
@@ -164,7 +166,7 @@
         document.getElementById('mainApp').style.display = 'flex';
         loadData();
       } else {
-        document.getElementById('authMsg').textContent = "Access Denied: " + user.email;
+        document.getElementById('authMsg').textContent = "Access Denied.";
         signOut(auth);
       }
     } else {
@@ -175,14 +177,22 @@
 
   async function loadData() {
     state.icons = [];
+    state.collections = ['All Icons'];
     const colSnap = await getDocs(collection(db, "Nilfisk"));
     colSnap.forEach(docSnap => {
       const docId = docSnap.id;
-      if (docId === 'Swatches') state.swatches = Object.entries(docSnap.data()).map(([n, c]) => ({ name: n, color: c }));
-      else if (docId === 'Collections') state.collections = docSnap.data().list || ['All Icons'];
-      else if (docId !== 'Accounts') {
-        Object.entries(docSnap.data()).forEach(([name, svg]) => {
-          state.icons.push({ name, svg, collection: docId });
+      if (docId === 'Swatches') {
+        state.swatches = Object.entries(docSnap.data()).map(([n, c]) => ({ name: n, color: c }));
+      } else if (docId !== 'Accounts') {
+        if(docId !== 'Collections') state.collections.push(docId); // Auto-detect collections
+        Object.entries(docSnap.data()).forEach(([name, data]) => {
+          state.icons.push({ 
+            name, 
+            svg: typeof data === 'string' ? data : data.svg, 
+            tags: data.tags || [], 
+            collection: docId,
+            collections: data.collections || [docId] // For multi-collection support
+          });
         });
       }
     });
@@ -192,20 +202,25 @@
   function render() {
     const grid = document.getElementById('iconGrid');
     grid.innerHTML = '';
+    const filters = parseSearchQuery(state.query);
     const filtered = state.icons.filter(i => {
-      const mCol = state.activeCol === 'All Icons' || i.collection === state.activeCol;
-      const mQuery = i.name.toLowerCase().includes(state.query.toLowerCase());
-      return mCol && mQuery;
+      const matchActiveCol = state.activeCol === 'All Icons' || i.collections.includes(state.activeCol);
+      const matchName = filters.text.length === 0 || filters.text.some(t => i.name.toLowerCase().includes(t));
+      const matchTag = filters.tags.length === 0 || filters.tags.every(t => i.tags.some(it => it.toLowerCase() === t));
+      const matchCol = filters.collections.length === 0 || filters.collections.some(c => i.collections.some(ic => ic.toLowerCase() === c));
+      return matchActiveCol && matchName && matchTag && matchCol;
     });
 
     filtered.forEach(icon => {
       const card = document.createElement('div');
       card.className = 'icon-card' + (state.selected?.name === icon.name ? ' selected' : '');
+      card.draggable = true;
+      card.ondragstart = (e) => { e.dataTransfer.setData('iconName', icon.name); e.dataTransfer.setData('iconCollection', icon.collection); };
       const blob = new Blob([icon.svg], {type: 'image/svg+xml'});
       const url = URL.createObjectURL(blob);
       card.innerHTML = `<div class="icon-preview"><img src="${url}" onload="URL.revokeObjectURL(this.src)"></div><div class="icon-name">${icon.name}</div>`;
-      card.onclick = () => { state.selected = icon; render(); showDetail(); document.getElementById('detailPanel').classList.add('show'); };
-      card.oncontextmenu = (e) => { e.preventDefault(); showIconCtx(e.clientX, e.clientY, icon); };
+      card.onclick = () => { state.selected = icon; render(); showDetail(); };
+      card.oncontextmenu = (e) => { e.preventDefault(); state.selected = icon; showIconCtx(e.clientX, e.clientY); };
       grid.appendChild(card);
     });
 
@@ -216,7 +231,12 @@
       div.className = 'collection-item' + (state.activeCol === c ? ' active' : '');
       div.textContent = c;
       div.onclick = () => { state.activeCol = c; render(); };
-      div.oncontextmenu = (e) => { e.preventDefault(); if(c !== 'All Icons') showColCtx(e.clientX, e.clientY, c); };
+      if (c !== 'All Icons') {
+        div.ondragover = (e) => { e.preventDefault(); div.classList.add('drag-over'); };
+        div.ondragleave = () => div.classList.remove('drag-over');
+        div.ondrop = (e) => { e.preventDefault(); div.classList.remove('drag-over'); moveIcon(e.dataTransfer.getData('iconName'), e.dataTransfer.getData('iconCollection'), c); };
+        div.oncontextmenu = (e) => { e.preventDefault(); showColCtx(e.clientX, e.clientY, c); };
+      }
       cList.appendChild(div);
     });
 
@@ -229,20 +249,31 @@
       div.oncontextmenu = (e) => { e.preventDefault(); showSwatchCtx(e.clientX, e.clientY, s); };
       sList.appendChild(div);
     });
-
+    
     document.getElementById('upCol').innerHTML = state.collections.filter(c => c !== 'All Icons').map(c => `<option value="${c}">${c}</option>`).join('');
   }
+  
+  async function moveIcon(iconName, oldCol, newCol) {
+    if (oldCol === newCol) return;
+    const icon = state.icons.find(i => i.name === iconName && i.collection === oldCol);
+    if (!icon) return;
 
+    const batch = writeBatch(db);
+    batch.set(doc(db, "Nilfisk", newCol), { [iconName]: { svg: icon.svg, tags: icon.tags, collections: [...icon.collections.filter(c=>c!==oldCol), newCol] } }, { merge: true });
+    batch.update(doc(db, "Nilfisk", oldCol), { [iconName]: deleteField() });
+    
+    await batch.commit();
+    loadData();
+  }
+  
   function showDetail() {
     const icon = state.selected;
-    const preview = document.getElementById('previewBox');
-    preview.innerHTML = icon.svg;
+    document.getElementById('detailPanel').classList.add('show');
+    document.getElementById('previewBox').innerHTML = icon.svg;
     document.getElementById('editName').value = icon.name;
     
-    const svgEl = preview.querySelector('svg');
-    const colors = { f: new Set(), s: new Set() };
-    const strokes = new Set();
-    
+    const svgEl = document.getElementById('previewBox').querySelector('svg');
+    const colors = { f: new Set(), s: new Set() }, strokes = new Set();
     svgEl.querySelectorAll('*').forEach(el => {
       const style = window.getComputedStyle(el);
       if (style.fill !== 'none' && style.fill.startsWith('rgb')) colors.f.add(rgbToHex(style.fill));
@@ -250,22 +281,16 @@
       if (parseFloat(style.strokeWidth) > 0) strokes.add(style.strokeWidth);
     });
 
-    const cList = document.getElementById('colorList');
-    cList.innerHTML = '';
+    const cList = document.getElementById('colorList'); cList.innerHTML = '';
     [...colors.f].forEach(c => addColorRow(c, 'Fill', cList));
     [...colors.s].forEach(c => addColorRow(c, 'Stroke', cList));
-    const sList = document.getElementById('strokeList');
-    sList.innerHTML = [...strokes].map(s => `<div style="font-size:12px; margin-bottom:4px">Width: <b>${s}</b></div>`).join('');
+    document.getElementById('strokeList').innerHTML = [...strokes].map(s => `<div style="font-size:12px; margin-bottom:4px">Width: <b>${s}</b></div>`).join('');
   }
 
   function addColorRow(hex, type, container) {
-    const div = document.createElement('div');
-    div.className = 'color-item';
-    div.innerHTML = `
-      <div class="color-preview" style="background:${hex}"></div>
-      <div style="flex:1; font-size:11px"><b>${type}</b>: ${hex}</div>
-      <select style="font-size:11px; padding:2px"><option value="">Swap...</option>${state.swatches.map(s => `<option value="${s.color}">${s.name}</option>`).join('')}</select>
-    `;
+    const div = document.createElement('div'); div.className = 'color-item';
+    div.innerHTML = `<div class="color-preview" style="background:${hex}"></div><div style="flex:1; font-size:11px"><b>${type}</b>: ${hex}</div>
+      <select style="font-size:11px; padding:2px"><option value="">Swap...</option>${state.swatches.map(s => `<option value="${s.color}">${s.name}</option>`).join('')}</select>`;
     div.querySelector('select').onchange = (e) => { if(e.target.value) swapColor(hex, e.target.value); };
     container.appendChild(div);
   }
@@ -275,120 +300,154 @@
     raw = raw.replace(new RegExp(oldHex, 'gi'), newHex);
     state.selected.svg = raw;
     updateDoc(doc(db, "Nilfisk", state.selected.collection), { [state.selected.name]: raw });
-    showDetail();
-    render();
+    showDetail(); render();
   }
   
-  function rgbToHex(rgb) {
-    const match = rgb.match(/\d+/g);
-    return "#" + match.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('').toUpperCase();
-  }
-
-  function showIconCtx(x, y, icon) {
+  function rgbToHex(rgb) { return "#" + rgb.match(/\d+/g).slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('').toUpperCase(); }
+  
+  function showIconCtx(x, y) {
     const menu = document.getElementById('ctxMenu');
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
-    menu.innerHTML = `<div class="context-menu-item" style="color:red">Delete Icon</div>`;
-    menu.querySelector('div').onclick = () => deleteIcon(icon);
+    menu.innerHTML = `<div id="ctxCopy" class="context-menu-item">Copy SVG</div>
+      <div id="ctxPng" class="context-menu-item">Download PNG</div>
+      <div id="ctxJpg" class="context-menu-item">Download JPG</div>
+      <div id="ctxDel" class="context-menu-item" style="color:red">Delete Icon</div>`;
+    menu.querySelector('#ctxCopy').onclick = () => { navigator.clipboard.writeText(state.selected.svg); };
+    menu.querySelector('#ctxPng').onclick = () => exportRaster('png');
+    menu.querySelector('#ctxJpg').onclick = () => exportRaster('jpeg');
+    menu.querySelector('#ctxDel').onclick = () => deleteIcon(state.selected);
   }
 
   async function deleteIcon(icon) {
-    if(confirm(`Delete "${icon.name}" from "${icon.collection}"?`)) {
+    if(confirm(`Delete "${icon.name}"?`)) {
       await updateDoc(doc(db, "Nilfisk", icon.collection), { [icon.name]: deleteField() });
-      state.selected = null;
-      document.getElementById('detailPanel').classList.remove('show');
+      state.selected = null; document.getElementById('detailPanel').classList.remove('show');
       loadData();
+    }
+  }
+
+  async function renameCollection(oldName) {
+    const newName = prompt("Enter new collection name:", oldName);
+    if(newName && newName !== oldName && !state.collections.includes(newName)) {
+      const oldDocRef = doc(db, "Nilfisk", oldName);
+      const oldDocSnap = await getDoc(oldDocRef);
+      if(oldDocSnap.exists()) {
+        await setDoc(doc(db, "Nilfisk", newName), oldDocSnap.data());
+        await deleteDoc(oldDocRef);
+        loadData();
+      }
     }
   }
 
   function showColCtx(x, y, col) {
     const menu = document.getElementById('ctxMenu');
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
-    menu.innerHTML = `<div class="context-menu-item" style="color:red">Delete Collection</div>`;
-    menu.querySelector('div').onclick = async () => {
-      if(confirm(`Delete collection "${col}"? This cannot be undone.`)) {
-        state.collections = state.collections.filter(c => c !== col);
-        await setDoc(doc(db, "Nilfisk", "Collections"), { list: state.collections });
+    menu.innerHTML = `<div id="ctxRenameCol" class="context-menu-item">Rename</div><div id="ctxDelCol" class="context-menu-item" style="color:red">Delete</div>`;
+    menu.querySelector('#ctxRenameCol').onclick = () => renameCollection(col);
+    menu.querySelector('#ctxDelCol').onclick = async () => {
+      if(confirm(`Delete collection "${col}" AND all icons within it?`)) {
+        await deleteDoc(doc(db, "Nilfisk", col));
         loadData();
       }
     };
   }
   
+  async function renameSwatch(oldName, oldColor) {
+    const newName = prompt("Enter new swatch name:", oldName);
+    const newColor = prompt("Enter new hex color:", oldColor);
+    if (newName && newColor) {
+      const batch = writeBatch(db);
+      batch.update(doc(db, "Nilfisk", "Swatches"), { [oldName]: deleteField() });
+      batch.update(doc(db, "Nilfisk", "Swatches"), { [newName]: newColor });
+      await batch.commit();
+      loadData();
+    }
+  }
+
   function showSwatchCtx(x, y, s) {
     const menu = document.getElementById('ctxMenu');
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
-    menu.innerHTML = `<div class="context-menu-item" style="color:red">Delete Swatch</div>`;
-    menu.querySelector('div').onclick = async () => {
+    menu.innerHTML = `<div id="ctxRenameSwatch" class="context-menu-item">Rename</div><div id="ctxDelSwatch" class="context-menu-item" style="color:red">Delete</div>`;
+    menu.querySelector('#ctxRenameSwatch').onclick = () => renameSwatch(s.name, s.color);
+    menu.querySelector('#ctxDelSwatch').onclick = async () => {
       await updateDoc(doc(db, "Nilfisk", "Swatches"), { [s.name]: deleteField() });
       loadData();
     };
   }
 
-  document.getElementById('addIconBtn').onclick = () => {
-    document.getElementById('upName').value = '';
-    document.getElementById('svgPaste').value = '';
-    document.getElementById('uploadModal').classList.add('show');
-  };
-
+  document.getElementById('addIconBtn').onclick = () => { document.getElementById('upName').value = ''; document.getElementById('svgPaste').value = ''; document.getElementById('uploadModal').classList.add('show'); };
   document.getElementById('dropZone').onclick = () => document.getElementById('fileInput').click();
   document.getElementById('fileInput').onchange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
-    reader.onload = (ev) => { 
-        document.getElementById('svgPaste').value = ev.target.result;
-        if(!document.getElementById('upName').value) document.getElementById('upName').value = file.name.replace('.svg','');
-    };
+    reader.onload = (ev) => { document.getElementById('svgPaste').value = ev.target.result; if(!document.getElementById('upName').value) document.getElementById('upName').value = file.name.replace('.svg',''); };
     reader.readAsText(file);
   };
-
+  
   document.getElementById('doUpload').onclick = async () => {
     const name = document.getElementById('upName').value.trim();
     const col = document.getElementById('upCol').value;
     const raw = document.getElementById('svgPaste').value.trim();
     const btn = document.getElementById('doUpload');
-
-    if (!name || !col || !raw) {
-      alert("Please provide an icon name, collection, and SVG code.");
-      return;
-    }
-    
-    btn.disabled = true;
-    btn.textContent = 'Uploading...';
+    if (!name || !col || !raw) return alert("All fields are required.");
+    btn.disabled = true; btn.textContent = 'Uploading...';
     try {
       await setDoc(doc(db, "Nilfisk", col), { [name]: raw }, { merge: true });
-      document.getElementById('uploadModal').classList.remove('show');
-      loadData();
-    } catch(e) {
-      console.error("Upload failed:", e);
-      alert("Upload failed. Check console for errors.");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Upload to Cloud';
-    }
+      closeModal(); loadData();
+    } catch(e) { alert("Upload failed: " + e.message); } 
+    finally { btn.disabled = false; btn.textContent = 'Upload to Cloud'; }
   };
 
   document.getElementById('addColBtn').onclick = async () => {
-    const n = prompt('Collection name:');
+    const n = prompt('New Collection Name:');
     if (n && !state.collections.includes(n)) {
-      state.collections.push(n);
-      await setDoc(doc(db, "Nilfisk", "Collections"), { list: state.collections });
-      render();
+      await setDoc(doc(db, "Nilfisk", n), { _init: true }); // Create empty doc
+      loadData();
     }
   };
 
   document.getElementById('addSwatchBtn').onclick = async () => {
-    const n = prompt('Swatch name:');
-    const c = prompt('Hex color:', '#000000');
-    if (n && c) {
-      await setDoc(doc(db, "Nilfisk", "Swatches"), { [n]: c }, { merge: true });
-      loadData();
-    }
+    const n = prompt('Swatch Name:'); const c = prompt('Hex color:', '#000000');
+    if (n && c) { await setDoc(doc(db, "Nilfisk", "Swatches"), { [n]: c }, { merge: true }); loadData(); }
   };
+  
+  function parseSearchQuery(query) {
+    const filters = { text: [], tags: [], collections: [] };
+    const tagRegex = /tag:"([^"]+)"/gi; const colRegex = /collection:"([^"]+)"/gi;
+    let match;
+    while ((match = tagRegex.exec(query)) !== null) filters.tags.push(match[1].toLowerCase());
+    while ((match = colRegex.exec(query)) !== null) filters.collections.push(match[1].toLowerCase());
+    const text = query.replace(tagRegex, '').replace(colRegex, '').trim().toLowerCase();
+    if (text) filters.text.push(text);
+    return filters;
+  }
+  
+  function closeModal() { document.getElementById('uploadModal').classList.remove('show'); }
+  
+  function exportRaster(format) {
+    const size = parseInt(prompt("Export size (px):", "512"));
+    if(!size) return;
+    const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      if(format==='jpeg') { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0,0,size,size); }
+      ctx.drawImage(img, 0, 0, size, size);
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL(`image/${format}`);
+      a.download = `${state.selected.name}.${format}`;
+      a.click();
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(state.selected.svg);
+  }
 
+  document.getElementById('bgToggle').onclick = () => { currentBg = (currentBg + 1) % bgModes.length; document.getElementById('previewBox').className = 'canvas-preview ' + bgModes[currentBg]; };
   document.getElementById('searchInput').oninput = (e) => { state.query = e.target.value; render(); };
   document.getElementById('copySvgBtn').onclick = () => { navigator.clipboard.writeText(state.selected.svg); alert('SVG Copied!'); };
-  document.getElementById('delIconBtn').onclick = () => deleteIcon(state.selected);
+  document.getElementById('dlPngBtn').onclick = () => exportRaster('png');
+  document.getElementById('dlJpgBtn').onclick = () => exportRaster('jpeg');
+  document.getElementById('gridContainer').oncontextmenu = (e) => { if(e.target === e.currentTarget) { e.preventDefault(); const menu = document.getElementById('ctxMenu'); menu.style.display = 'block'; menu.style.left = e.clientX+'px'; menu.style.top = e.clientY+'px'; menu.innerHTML = `<div class="context-menu-item">Add Icon</div>`; menu.querySelector('div').onclick = () => document.getElementById('addIconBtn').click(); }};
   document.addEventListener('click', (e) => { if(!e.target.closest('.context-menu, [oncontextmenu]')) document.getElementById('ctxMenu').style.display='none'; });
-
 </script>
 </body>
 </html>
