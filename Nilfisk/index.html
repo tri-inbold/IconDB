@@ -5,44 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nilfisk Icon Hub</title>
 <style>
-  :root {
-    --nilfisk-light: #EFF0F2;
-    --nilfisk-dark: #28313F;
-    --nilfisk-pro-blue: #38AFD9;
-  }
+  :root { --nilfisk-dark: #28313F; --nilfisk-pro-blue: #38AFD9; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f5f5f5; color: #2c2c2c; overflow: hidden;
-  }
-  #loginScreen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--nilfisk-dark); display: flex; align-items: center; justify-content: center; z-index: 10000;
-  }
-  .login-card {
-    background: white; padding: 40px; border-radius: 12px; text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3); max-width: 400px; width: 90%;
-  }
-  .btn-google {
-    background: #4285F4; color: white; border: none; padding: 12px 24px;
-    border-radius: 4px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #2c2c2c; overflow: hidden; }
+  #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--nilfisk-dark); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+  .login-card { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); max-width: 400px; width: 90%; }
+  .btn-google { background: #4285F4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%; }
   #mainApp { display: none; height: 100vh; flex-direction: column; }
-  .header {
-    background: white; border-bottom: 1px solid #e0e0e0;
-    padding: 16px 24px; display: flex; align-items: center; gap: 16px; flex-shrink: 0;
-  }
+  .header { background: white; border-bottom: 1px solid #e0e0e0; padding: 16px 24px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
   .search-box { flex: 1; max-width: 500px; }
   .search-box input { width: 100%; padding: 8px 12px; border: 1px solid #d0d0d0; border-radius: 4px; font-size: 14px; }
   .main-content { display: flex; flex: 1; overflow: hidden; }
   .sidebar { width: 240px; background: white; border-right: 1px solid #e0e0e0; overflow-y: auto; flex-shrink: 0; }
   .sidebar-section { padding: 16px; border-bottom: 1px solid #e0e0e0; }
   .sidebar-section h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #999; margin-bottom: 12px; }
-  .collection-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-  .collection-item:hover { background: #f5f5f5; }
+  .collection-item, .swatch-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .collection-item:hover, .swatch-item:hover { background: #f5f5f5; }
   .collection-item.active { background: #e3f2fd; color: #1976d2; font-weight: 600; }
-  .collection-item.drag-over { background: var(--nilfisk-pro-blue); color: white; }
-  .swatch-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
   .swatch-color { width: 18px; height: 18px; border-radius: 3px; border: 1px solid #ddd; }
   .icon-grid-container { flex: 1; overflow-y: auto; padding: 24px; background: #fafafa; }
   .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
@@ -50,7 +29,7 @@
   .icon-card:hover { border-color: var(--nilfisk-pro-blue); transform: translateY(-2px); }
   .icon-card.selected { border: 2px solid var(--nilfisk-pro-blue); background: #f0f9fd; }
   .icon-preview { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%); background-size: 10px 10px; border-radius: 4px; overflow: hidden; }
-  .icon-preview svg, .icon-preview img { max-width: 80%; max-height: 80%; display: block; }
+  .icon-preview svg { max-width: 80%; max-height: 80%; display: block; }
   .icon-name { font-size: 11px; font-weight: 500; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .detail-panel { width: 340px; background: white; border-left: 1px solid #e0e0e0; overflow-y: auto; display: none; }
   .detail-panel.show { display: block; }
@@ -61,10 +40,16 @@
   .canvas-preview.white { background: #fff; border: 1px solid #eee; }
   .canvas-preview.dark { background: var(--nilfisk-dark); }
   .canvas-preview svg { max-width: 85%; max-height: 85%; }
+  .export-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .export-grid button { padding: 10px; cursor: pointer; border: 1px solid #ddd; background: white; border-radius: 6px; font-size: 12px; font-weight: 500; text-align: center; }
+  .export-grid button:hover { background: #f5f5f5; border-color: #ccc; }
   .color-item { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #eee; border-radius: 6px; margin-bottom: 8px; }
   .color-preview { width: 28px; height: 28px; border-radius: 4px; border: 1px solid #ddd; }
-  .tag-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: #e3f2fd; color: #1976d2; border-radius: 12px; font-size: 11px; margin: 2px; }
-  .tag-chip button { background: none; border: none; cursor: pointer; color: inherit; font-size: 14px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 12px; font-size: 11px; margin: 2px; cursor: pointer; }
+  .chip.collection { background: #e8f5e9; color: #2e7d32; }
+  .chip.tag { background: #e3f2fd; color: #1976d2; }
+  .chip button { background: none; border: none; cursor: pointer; color: inherit; font-size: 14px; opacity: 0.6; }
+  .chip button:hover { opacity: 1; }
   .fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--nilfisk-pro-blue); color: white; border: none; border-radius: 50%; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(56, 175, 217, 0.4); }
   .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 2000; align-items: center; justify-content: center; }
   .modal.show { display: flex; }
@@ -101,17 +86,18 @@
       <div class="detail-section">
         <h3>Preview <img id="bgToggle" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXNxdWFyZS1kYXNoZWQtYm90dG9tIj48cGF0aCBkPSJNOCAxMnY2Ii8+PHBhdGggZD0iTTEyIDEydjYiLz48cGF0aCBkPSJNMTYgMTJ2NiIvPjxwYXRoIGQ9Ik00IDIwVjdoYTMgMyAwIDAgMSAzIDNoMGEzIDMgMCAwIDAgMyAzaDZhMyAzIDAgMCAxIDMgM3Y0Ii8+PC9zdmc+" style="cursor:pointer; opacity:0.6"></h3>
         <div class="canvas-preview checker" id="previewBox"></div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px">
+        <div class="export-grid">
           <button id="copySvgBtn">Copy SVG</button>
           <button id="dlPngBtn">PNG</button>
+          <button id="dlSvgBtn">Download SVG</button>
           <button id="dlJpgBtn">JPG</button>
         </div>
       </div>
       <div class="detail-section"><h3>Name</h3><input type="text" id="editName" readonly style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; background:#f9f9f9"></div>
-      <div class="detail-section"><h3>Collections</h3><div id="iconCollections"></div></div>
-      <div class="detail-section"><h3>Tags</h3><div id="tagContainer"></div><input type="text" id="tagInput" placeholder="Press Enter to add..." style="width:100%; margin-top:8px; padding:8px; border:1px solid #ddd; border-radius:4px;"></div>
+      <div class="detail-section"><h3>Collections</h3><div id="iconCollections"></div><select id="addIconToCol" style="width:100%; margin-top:8px; padding:8px; border:1px solid #ddd; border-radius:4px;"><option>Add to collection...</option></select></div>
+      <div class="detail-section"><h3>Tags</h3><div id="tagContainer"></div><input type="text" id="tagInput" placeholder="Press Enter to add tag..." style="width:100%; margin-top:8px; padding:8px; border:1px solid #ddd; border-radius:4px;"></div>
       <div class="detail-section"><h3>Colors</h3><div id="colorList"></div></div>
-      <div class="detail-section"><h3>Stroke</h3><div id="strokeList"></div></div>
+      <div class="detail-section"><h3>Stroke</h3><div id="strokeList"></div><div style="display:flex; gap:8px; margin-top:8px;"><input type="number" id="strokeInput" placeholder="width" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:4px"><button id="applyStrokeBtn" style="padding:8px 12px; border:1px solid #ddd; background:white; border-radius:4px; cursor:pointer">Apply</button></div></div>
     </div>
   </div>
   <button class="fab" id="addIconBtn">+</button>
@@ -135,7 +121,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, getDocs, setDoc, updateDoc, deleteField, collection, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAsv8v9b7YXgt7315B6184e9E85QCL9Qfs",
@@ -143,7 +129,7 @@
     projectId: "icondb-28ddd",
     storageBucket: "icondb-28ddd.firebasestorage.app",
     messagingSenderId: "145146058112",
-    appId: "1:145146058112:web:2aed071e107cf7d4e71d65"
+    appId: "1:145146058112:web:2aed71e107cf7d4e71d65"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -152,8 +138,7 @@
   const provider = new GoogleAuthProvider();
 
   let state = { icons: [], swatches: [], collections: [], selected: null, activeCol: 'All Icons', query: '' };
-  let bgModes = ['checker', 'white', 'dark'];
-  let currentBg = 0;
+  let bgModes = ['checker', 'white', 'dark'], currentBg = 0;
 
   document.getElementById('loginBtn').onclick = () => signInWithPopup(auth, provider);
   document.getElementById('logoutBtn').onclick = () => signOut(auth);
@@ -165,10 +150,7 @@
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('mainApp').style.display = 'flex';
         loadData();
-      } else {
-        document.getElementById('authMsg').textContent = "Access Denied.";
-        signOut(auth);
-      }
+      } else { signOut(auth); alert("Access Denied."); }
     } else {
       document.getElementById('loginScreen').style.display = 'flex';
       document.getElementById('mainApp').style.display = 'none';
@@ -176,72 +158,49 @@
   });
 
   async function loadData() {
-    state.icons = [];
-    state.collections = ['All Icons'];
-    const colSnap = await getDocs(collection(db, "Nilfisk"));
-    colSnap.forEach(docSnap => {
-      const docId = docSnap.id;
-      if (docId === 'Swatches') {
-        state.swatches = Object.entries(docSnap.data()).map(([n, c]) => ({ name: n, color: c }));
-      } else if (docId !== 'Accounts') {
-        if(docId !== 'Collections') state.collections.push(docId); // Auto-detect collections
-        Object.entries(docSnap.data()).forEach(([name, data]) => {
-          state.icons.push({ 
-            name, 
-            svg: typeof data === 'string' ? data : data.svg, 
-            tags: data.tags || [], 
-            collection: docId,
-            collections: data.collections || [docId] // For multi-collection support
-          });
-        });
-      }
-    });
+    const iconsDoc = await getDoc(doc(db, "Nilfisk", "Icons"));
+    state.icons = iconsDoc.exists() ? Object.entries(iconsDoc.data()).map(([name, data]) => ({ name, ...data })) : [];
+    
+    const metaDoc = await getDoc(doc(db, "Nilfisk", "Metadata"));
+    if (metaDoc.exists()) {
+      state.collections = ['All Icons', ...(metaDoc.data().collections || [])];
+      state.swatches = Object.entries(metaDoc.data().swatches || {}).map(([name, color]) => ({ name, color }));
+    }
     render();
   }
 
   function render() {
-    const grid = document.getElementById('iconGrid');
-    grid.innerHTML = '';
+    const grid = document.getElementById('iconGrid'); grid.innerHTML = '';
     const filters = parseSearchQuery(state.query);
     const filtered = state.icons.filter(i => {
-      const matchActiveCol = state.activeCol === 'All Icons' || i.collections.includes(state.activeCol);
+      const matchActiveCol = state.activeCol === 'All Icons' || (i.collections && i.collections.includes(state.activeCol));
       const matchName = filters.text.length === 0 || filters.text.some(t => i.name.toLowerCase().includes(t));
-      const matchTag = filters.tags.length === 0 || filters.tags.every(t => i.tags.some(it => it.toLowerCase() === t));
-      const matchCol = filters.collections.length === 0 || filters.collections.some(c => i.collections.some(ic => ic.toLowerCase() === c));
+      const matchTag = filters.tags.length === 0 || filters.tags.every(t => i.tags && i.tags.some(it => it.toLowerCase() === t));
+      const matchCol = filters.collections.length === 0 || filters.collections.some(c => i.collections && i.collections.some(ic => ic.toLowerCase() === c));
       return matchActiveCol && matchName && matchTag && matchCol;
     });
 
     filtered.forEach(icon => {
       const card = document.createElement('div');
       card.className = 'icon-card' + (state.selected?.name === icon.name ? ' selected' : '');
-      card.draggable = true;
-      card.ondragstart = (e) => { e.dataTransfer.setData('iconName', icon.name); e.dataTransfer.setData('iconCollection', icon.collection); };
       const blob = new Blob([icon.svg], {type: 'image/svg+xml'});
       const url = URL.createObjectURL(blob);
       card.innerHTML = `<div class="icon-preview"><img src="${url}" onload="URL.revokeObjectURL(this.src)"></div><div class="icon-name">${icon.name}</div>`;
       card.onclick = () => { state.selected = icon; render(); showDetail(); };
-      card.oncontextmenu = (e) => { e.preventDefault(); state.selected = icon; showIconCtx(e.clientX, e.clientY); };
       grid.appendChild(card);
     });
 
-    const cList = document.getElementById('colList');
-    cList.innerHTML = '';
+    const cList = document.getElementById('colList'); cList.innerHTML = '';
     state.collections.forEach(c => {
       const div = document.createElement('div');
       div.className = 'collection-item' + (state.activeCol === c ? ' active' : '');
       div.textContent = c;
       div.onclick = () => { state.activeCol = c; render(); };
-      if (c !== 'All Icons') {
-        div.ondragover = (e) => { e.preventDefault(); div.classList.add('drag-over'); };
-        div.ondragleave = () => div.classList.remove('drag-over');
-        div.ondrop = (e) => { e.preventDefault(); div.classList.remove('drag-over'); moveIcon(e.dataTransfer.getData('iconName'), e.dataTransfer.getData('iconCollection'), c); };
-        div.oncontextmenu = (e) => { e.preventDefault(); showColCtx(e.clientX, e.clientY, c); };
-      }
+      if (c !== 'All Icons') div.oncontextmenu = (e) => { e.preventDefault(); showColCtx(e.clientX, e.clientY, c); };
       cList.appendChild(div);
     });
 
-    const sList = document.getElementById('swatchList');
-    sList.innerHTML = '';
+    const sList = document.getElementById('swatchList'); sList.innerHTML = '';
     state.swatches.forEach(s => {
       const div = document.createElement('div');
       div.className = 'swatch-item';
@@ -253,25 +212,34 @@
     document.getElementById('upCol').innerHTML = state.collections.filter(c => c !== 'All Icons').map(c => `<option value="${c}">${c}</option>`).join('');
   }
   
-  async function moveIcon(iconName, oldCol, newCol) {
-    if (oldCol === newCol) return;
-    const icon = state.icons.find(i => i.name === iconName && i.collection === oldCol);
-    if (!icon) return;
-
-    const batch = writeBatch(db);
-    batch.set(doc(db, "Nilfisk", newCol), { [iconName]: { svg: icon.svg, tags: icon.tags, collections: [...icon.collections.filter(c=>c!==oldCol), newCol] } }, { merge: true });
-    batch.update(doc(db, "Nilfisk", oldCol), { [iconName]: deleteField() });
-    
-    await batch.commit();
-    loadData();
-  }
-  
   function showDetail() {
     const icon = state.selected;
     document.getElementById('detailPanel').classList.add('show');
     document.getElementById('previewBox').innerHTML = icon.svg;
     document.getElementById('editName').value = icon.name;
     
+    const iconCols = document.getElementById('iconCollections'); iconCols.innerHTML = '';
+    (icon.collections || []).forEach(c => {
+      const chip = document.createElement('span'); chip.className = 'chip collection';
+      chip.innerHTML = `${c} <button>&times;</button>`;
+      chip.onclick = (e) => { if(e.target.tagName !== 'BUTTON') setSearch(`collection:"${c}"`); };
+      chip.querySelector('button').onclick = () => { icon.collections = icon.collections.filter(x => x !== c); saveIcon(); showDetail(); };
+      iconCols.appendChild(chip);
+    });
+
+    const colSelect = document.getElementById('addIconToCol');
+    colSelect.innerHTML = `<option>Add to...</option>` + state.collections.filter(c => c !== 'All Icons' && !(icon.collections || []).includes(c)).map(c => `<option value="${c}">${c}</option>`).join('');
+    colSelect.onchange = (e) => { if (e.target.value) { icon.collections = [...(icon.collections || []), e.target.value]; saveIcon(); showDetail(); }};
+
+    const tags = document.getElementById('tagContainer'); tags.innerHTML = '';
+    (icon.tags || []).forEach(t => {
+      const chip = document.createElement('span'); chip.className = 'chip tag';
+      chip.innerHTML = `${t} <button>&times;</button>`;
+      chip.onclick = (e) => { if(e.target.tagName !== 'BUTTON') setSearch(`tag:"${t}"`); };
+      chip.querySelector('button').onclick = () => { icon.tags = icon.tags.filter(x => x !== t); saveIcon(); showDetail(); };
+      tags.appendChild(chip);
+    });
+
     const svgEl = document.getElementById('previewBox').querySelector('svg');
     const colors = { f: new Set(), s: new Set() }, strokes = new Set();
     svgEl.querySelectorAll('*').forEach(el => {
@@ -280,13 +248,12 @@
       if (style.stroke !== 'none' && style.stroke.startsWith('rgb')) colors.s.add(rgbToHex(style.stroke));
       if (parseFloat(style.strokeWidth) > 0) strokes.add(style.strokeWidth);
     });
-
+    
     const cList = document.getElementById('colorList'); cList.innerHTML = '';
-    [...colors.f].forEach(c => addColorRow(c, 'Fill', cList));
-    [...colors.s].forEach(c => addColorRow(c, 'Stroke', cList));
-    document.getElementById('strokeList').innerHTML = [...strokes].map(s => `<div style="font-size:12px; margin-bottom:4px">Width: <b>${s}</b></div>`).join('');
+    [...colors.f, ...colors.s].forEach(c => addColorRow(c, colors.f.has(c)? 'Fill' : 'Stroke', cList));
+    document.getElementById('strokeList').innerHTML = [...strokes].map(s => `<div style="font-size:12px">Width: <b>${s}</b></div>`).join('');
   }
-
+  
   function addColorRow(hex, type, container) {
     const div = document.createElement('div'); div.className = 'color-item';
     div.innerHTML = `<div class="color-preview" style="background:${hex}"></div><div style="flex:1; font-size:11px"><b>${type}</b>: ${hex}</div>
@@ -299,82 +266,113 @@
     let raw = state.selected.svg;
     raw = raw.replace(new RegExp(oldHex, 'gi'), newHex);
     state.selected.svg = raw;
-    updateDoc(doc(db, "Nilfisk", state.selected.collection), { [state.selected.name]: raw });
-    showDetail(); render();
+    saveIcon(); render(); showDetail();
   }
   
+  function changeStrokeWidth(newWidth) {
+    if(!newWidth || isNaN(newWidth)) return;
+    let raw = state.selected.svg;
+    raw = raw.replace(/stroke-width="[^"]*"/g, `stroke-width="${newWidth}"`);
+    state.selected.svg = raw;
+    saveIcon(); render(); showDetail();
+  }
+
   function rgbToHex(rgb) { return "#" + rgb.match(/\d+/g).slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('').toUpperCase(); }
   
+  async function saveIcon() {
+    const icon = state.selected;
+    await updateDoc(doc(db, "Nilfisk", "Icons"), { [icon.name]: { svg: icon.svg, collections: icon.collections, tags: icon.tags } });
+  }
+
   function showIconCtx(x, y) {
     const menu = document.getElementById('ctxMenu');
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
-    menu.innerHTML = `<div id="ctxCopy" class="context-menu-item">Copy SVG</div>
-      <div id="ctxPng" class="context-menu-item">Download PNG</div>
-      <div id="ctxJpg" class="context-menu-item">Download JPG</div>
-      <div id="ctxDel" class="context-menu-item" style="color:red">Delete Icon</div>`;
-    menu.querySelector('#ctxCopy').onclick = () => { navigator.clipboard.writeText(state.selected.svg); };
-    menu.querySelector('#ctxPng').onclick = () => exportRaster('png');
-    menu.querySelector('#ctxJpg').onclick = () => exportRaster('jpeg');
-    menu.querySelector('#ctxDel').onclick = () => deleteIcon(state.selected);
+    menu.innerHTML = `<div class="context-menu-item">Copy SVG</div><div class="context-menu-item">Download SVG</div><div class="context-menu-item">Download PNG</div><div class="context-menu-item">Download JPG</div><div class="context-menu-item" style="color:red">Delete Icon</div>`;
+    const actions = menu.querySelectorAll('div');
+    actions[0].onclick = () => navigator.clipboard.writeText(state.selected.svg);
+    actions[1].onclick = () => downloadSVG();
+    actions[2].onclick = () => exportRaster('png');
+    actions[3].onclick = () => exportRaster('jpeg');
+    actions[4].onclick = () => deleteIcon();
   }
 
-  async function deleteIcon(icon) {
+  async function deleteIcon() {
+    const icon = state.selected;
     if(confirm(`Delete "${icon.name}"?`)) {
-      await updateDoc(doc(db, "Nilfisk", icon.collection), { [icon.name]: deleteField() });
+      await updateDoc(doc(db, "Nilfisk", "Icons"), { [icon.name]: deleteField() });
       state.selected = null; document.getElementById('detailPanel').classList.remove('show');
       loadData();
     }
   }
 
-  async function renameCollection(oldName) {
-    const newName = prompt("Enter new collection name:", oldName);
-    if(newName && newName !== oldName && !state.collections.includes(newName)) {
-      const oldDocRef = doc(db, "Nilfisk", oldName);
-      const oldDocSnap = await getDoc(oldDocRef);
-      if(oldDocSnap.exists()) {
-        await setDoc(doc(db, "Nilfisk", newName), oldDocSnap.data());
-        await deleteDoc(oldDocRef);
-        loadData();
-      }
+  async function renameSwatch(oldName, oldColor) {
+    const newName = prompt("Enter new swatch name:", oldName);
+    const newColor = prompt("Enter new hex color:", oldColor);
+    if (newName && newColor) {
+      const batch = writeBatch(db);
+      batch.update(doc(db, "Nilfisk", "Metadata"), { [`swatches.${oldName}`]: deleteField() });
+      batch.update(doc(db, "Nilfisk", "Metadata"), { [`swatches.${newName}`]: newColor });
+      await batch.commit();
+      loadData();
     }
   }
 
   function showColCtx(x, y, col) {
     const menu = document.getElementById('ctxMenu');
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
-    menu.innerHTML = `<div id="ctxRenameCol" class="context-menu-item">Rename</div><div id="ctxDelCol" class="context-menu-item" style="color:red">Delete</div>`;
-    menu.querySelector('#ctxRenameCol').onclick = () => renameCollection(col);
-    menu.querySelector('#ctxDelCol').onclick = async () => {
-      if(confirm(`Delete collection "${col}" AND all icons within it?`)) {
-        await deleteDoc(doc(db, "Nilfisk", col));
+    menu.innerHTML = `<div class="context-menu-item">Delete Collection</div>`;
+    menu.querySelector('div').onclick = async () => {
+      if(confirm(`Delete collection "${col}"? This will NOT delete its icons.`)) {
+        state.collections = state.collections.filter(c => c !== col);
+        await setDoc(doc(db, "Nilfisk", "Metadata"), { collections: state.collections.filter(c=>c!=='All Icons') }, {merge: true});
         loadData();
       }
     };
   }
   
-  async function renameSwatch(oldName, oldColor) {
-    const newName = prompt("Enter new swatch name:", oldName);
-    const newColor = prompt("Enter new hex color:", oldColor);
-    if (newName && newColor) {
-      const batch = writeBatch(db);
-      batch.update(doc(db, "Nilfisk", "Swatches"), { [oldName]: deleteField() });
-      batch.update(doc(db, "Nilfisk", "Swatches"), { [newName]: newColor });
-      await batch.commit();
-      loadData();
-    }
-  }
-
   function showSwatchCtx(x, y, s) {
     const menu = document.getElementById('ctxMenu');
     menu.style.display = 'block'; menu.style.left = x + 'px'; menu.style.top = y + 'px';
-    menu.innerHTML = `<div id="ctxRenameSwatch" class="context-menu-item">Rename</div><div id="ctxDelSwatch" class="context-menu-item" style="color:red">Delete</div>`;
-    menu.querySelector('#ctxRenameSwatch').onclick = () => renameSwatch(s.name, s.color);
-    menu.querySelector('#ctxDelSwatch').onclick = async () => {
-      await updateDoc(doc(db, "Nilfisk", "Swatches"), { [s.name]: deleteField() });
-      loadData();
-    };
+    menu.innerHTML = `<div class="context-menu-item">Rename/Edit</div><div class="context-menu-item" style="color:red">Delete</div>`;
+    menu.children[0].onclick = () => renameSwatch(s.name, s.color);
+    menu.children[1].onclick = async () => { await updateDoc(doc(db, "Nilfisk", "Metadata"), { [`swatches.${s.name}`]: deleteField() }); loadData(); };
   }
 
+  function setSearch(query) { document.getElementById('searchInput').value = query; state.query = query; render(); }
+  function closeModal() { document.getElementById('uploadModal').classList.remove('show'); }
+  
+  function exportRaster(format) {
+    const canvas = document.createElement('canvas'); canvas.width = 248; canvas.height = 248;
+    const ctx = canvas.getContext('2d'); const img = new Image();
+    img.onload = () => {
+      if(format==='jpeg') { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0,0,248,248); }
+      ctx.drawImage(img, 0, 0, 248, 248);
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL(`image/${format}`);
+      a.download = `${state.selected.name}.${format}`;
+      a.click();
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(state.selected.svg);
+  }
+
+  function downloadSVG() {
+      const a = document.createElement('a');
+      a.href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(state.selected.svg);
+      a.download = `${state.selected.name}.svg`;
+      a.click();
+  }
+
+  function parseSearchQuery(query) {
+    const filters = { text: [], tags: [], collections: [] };
+    const tagRegex = /tag:"([^"]+)"/gi; const colRegex = /collection:"([^"]+)"/gi;
+    let match;
+    while ((match = tagRegex.exec(query)) !== null) filters.tags.push(match[1].toLowerCase());
+    while ((match = colRegex.exec(query)) !== null) filters.collections.push(match[1].toLowerCase());
+    const text = query.replace(tagRegex, '').replace(colRegex, '').trim().toLowerCase();
+    if (text) filters.text.push(text);
+    return filters;
+  }
+  
   document.getElementById('addIconBtn').onclick = () => { document.getElementById('upName').value = ''; document.getElementById('svgPaste').value = ''; document.getElementById('uploadModal').classList.add('show'); };
   document.getElementById('dropZone').onclick = () => document.getElementById('fileInput').click();
   document.getElementById('fileInput').onchange = (e) => {
@@ -388,11 +386,10 @@
     const name = document.getElementById('upName').value.trim();
     const col = document.getElementById('upCol').value;
     const raw = document.getElementById('svgPaste').value.trim();
-    const btn = document.getElementById('doUpload');
     if (!name || !col || !raw) return alert("All fields are required.");
-    btn.disabled = true; btn.textContent = 'Uploading...';
+    const btn = document.getElementById('doUpload'); btn.disabled = true; btn.textContent = 'Uploading...';
     try {
-      await setDoc(doc(db, "Nilfisk", col), { [name]: raw }, { merge: true });
+      await updateDoc(doc(db, "Nilfisk", "Icons"), { [name]: { svg: raw, collections: [col], tags: [] } });
       closeModal(); loadData();
     } catch(e) { alert("Upload failed: " + e.message); } 
     finally { btn.disabled = false; btn.textContent = 'Upload to Cloud'; }
@@ -401,51 +398,25 @@
   document.getElementById('addColBtn').onclick = async () => {
     const n = prompt('New Collection Name:');
     if (n && !state.collections.includes(n)) {
-      await setDoc(doc(db, "Nilfisk", n), { _init: true }); // Create empty doc
+      const newCollections = [...state.collections.filter(c => c !== 'All Icons'), n];
+      await setDoc(doc(db, "Nilfisk", "Metadata"), { collections: newCollections }, { merge: true });
       loadData();
     }
   };
 
   document.getElementById('addSwatchBtn').onclick = async () => {
     const n = prompt('Swatch Name:'); const c = prompt('Hex color:', '#000000');
-    if (n && c) { await setDoc(doc(db, "Nilfisk", "Swatches"), { [n]: c }, { merge: true }); loadData(); }
+    if (n && c) { await setDoc(doc(db, "Nilfisk", "Metadata"), { swatches: { [n]: c } }, { merge: true }); loadData(); }
   };
   
-  function parseSearchQuery(query) {
-    const filters = { text: [], tags: [], collections: [] };
-    const tagRegex = /tag:"([^"]+)"/gi; const colRegex = /collection:"([^"]+)"/gi;
-    let match;
-    while ((match = tagRegex.exec(query)) !== null) filters.tags.push(match[1].toLowerCase());
-    while ((match = colRegex.exec(query)) !== null) filters.collections.push(match[1].toLowerCase());
-    const text = query.replace(tagRegex, '').replace(colRegex, '').trim().toLowerCase();
-    if (text) filters.text.push(text);
-    return filters;
-  }
-  
-  function closeModal() { document.getElementById('uploadModal').classList.remove('show'); }
-  
-  function exportRaster(format) {
-    const size = parseInt(prompt("Export size (px):", "512"));
-    if(!size) return;
-    const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    img.onload = () => {
-      if(format==='jpeg') { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0,0,size,size); }
-      ctx.drawImage(img, 0, 0, size, size);
-      const a = document.createElement('a');
-      a.href = canvas.toDataURL(`image/${format}`);
-      a.download = `${state.selected.name}.${format}`;
-      a.click();
-    };
-    img.src = 'data:image/svg+xml;base64,' + btoa(state.selected.svg);
-  }
-
+  document.getElementById('tagInput').onkeydown = (e) => { if (e.key === 'Enter' && e.target.value.trim()) { e.preventDefault(); state.selected.tags = [...(state.selected.tags || []), e.target.value.trim()]; e.target.value = ''; saveIcon(); showDetail(); }};
   document.getElementById('bgToggle').onclick = () => { currentBg = (currentBg + 1) % bgModes.length; document.getElementById('previewBox').className = 'canvas-preview ' + bgModes[currentBg]; };
   document.getElementById('searchInput').oninput = (e) => { state.query = e.target.value; render(); };
   document.getElementById('copySvgBtn').onclick = () => { navigator.clipboard.writeText(state.selected.svg); alert('SVG Copied!'); };
+  document.getElementById('dlSvgBtn').onclick = () => downloadSVG();
   document.getElementById('dlPngBtn').onclick = () => exportRaster('png');
   document.getElementById('dlJpgBtn').onclick = () => exportRaster('jpeg');
+  document.getElementById('applyStrokeBtn').onclick = () => changeStrokeWidth(document.getElementById('strokeInput').value);
   document.getElementById('gridContainer').oncontextmenu = (e) => { if(e.target === e.currentTarget) { e.preventDefault(); const menu = document.getElementById('ctxMenu'); menu.style.display = 'block'; menu.style.left = e.clientX+'px'; menu.style.top = e.clientY+'px'; menu.innerHTML = `<div class="context-menu-item">Add Icon</div>`; menu.querySelector('div').onclick = () => document.getElementById('addIconBtn').click(); }};
   document.addEventListener('click', (e) => { if(!e.target.closest('.context-menu, [oncontextmenu]')) document.getElementById('ctxMenu').style.display='none'; });
 </script>
